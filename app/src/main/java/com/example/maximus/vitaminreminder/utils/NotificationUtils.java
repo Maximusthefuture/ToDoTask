@@ -20,6 +20,7 @@ import android.support.v4.content.ContextCompat;
 
 import com.example.maximus.vitaminreminder.MainActivity;
 import com.example.maximus.vitaminreminder.R;
+import com.example.maximus.vitaminreminder.sync.ReminderTask;
 import com.example.maximus.vitaminreminder.sync.VitaminReminderIntentService;
 
 import java.util.Calendar;
@@ -58,7 +59,7 @@ public class NotificationUtils {
 
         Intent intent = new Intent(context, cls);
         PendingIntent pendingIntent =
-                PendingIntent.getBroadcast(context, DRINKING_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.getService(context, DRINKING_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.setInexactRepeating(AlarmManager.RTC_WAKEUP, setCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
@@ -83,9 +84,10 @@ public class NotificationUtils {
             notificationChannel.setDescription(description);
             NotificationManager manager = context.getSystemService(NotificationManager.class);
             manager.createNotificationChannel(notificationChannel);
+
         }
 
-
+        //TODO: Colorful notification ACTION on 26/27 API
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setSmallIcon(R.drawable.ic_medicine)
@@ -123,21 +125,28 @@ public class NotificationUtils {
 
     private static NotificationCompat.Action completeVitaminDrinking(Context context) {
         Intent intent = new Intent(context, VitaminReminderIntentService.class);
-        intent.setAction(null);
+        intent.setAction(ReminderTask.ACTION_ADD_DOT_SPAN);
 
+        PendingIntent changeColorIntent =
+                PendingIntent.getService(context, 3, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationCompat.Action vitaminDrinkComplete = new NotificationCompat.Action(
-                R.drawable.ic_medicine, "Drunk", null);
-        return vitaminDrinkComplete;
+                R.drawable.ic_medicine__notification, "Drunk", changeColorIntent);
+
+            return vitaminDrinkComplete;
+
     }
 
     private static NotificationCompat.Action ignoreReminderAction(Context context) {
         Intent intent = new Intent(context, VitaminReminderIntentService.class);
-        intent.setAction(null);
+        intent.setAction(ReminderTask.ACTION_DISMISS_NOTIFICATION);
+
+        PendingIntent dismissIntent =
+                PendingIntent.getService(context, 5, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        NotificationCompat.Action ignore = new NotificationCompat.Action(
-                android.R.drawable.ic_menu_close_clear_cancel, "No, thanks", null);
+        NotificationCompat.Action ignore = new NotificationCompat.Action(R.drawable.ic_cancel_black_24px, "No, thanks", dismissIntent);
+
         return ignore;
     }
 
@@ -151,8 +160,8 @@ public class NotificationUtils {
                 PackageManager.DONT_KILL_APP);
 
         Intent intent = new Intent(context, cls);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DRINKING_NOTIFICATION_ID, intent
-        , PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getService(context, DRINKING_NOTIFICATION_ID, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.cancel(pendingIntent);
         pendingIntent.cancel();
