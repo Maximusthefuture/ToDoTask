@@ -11,6 +11,25 @@
 
     <CheckBoxPreference
         android:key="notification_key"
-        android:title="Notification"/>
+        android:title="Notification"
+        android:defaultValue="false"
+        android:summaryOn="YES"
+        android:summaryOff="NO"/>
+
+
+    <ListPreference
+        android:defaultValue="@string/ten_min"
+        android:dialogTitle="Choose interval"
+        android:key="@string/interval_list_key"
+        android:title="Choose Interval"
+        android:entries="@array/pref_interval_time_lables"
+        android:entryValues="@array/pref_interval_option_value"
+        />
+
+
+    <!--<EditTextPreference-->
+        <!--android:key="@string/interval_key"-->
+        <!--android:defaultValue="@string/default_value_interval"-->
+        <!--android:title="@string/interval"/>-->
 
 </PreferenceScreen>

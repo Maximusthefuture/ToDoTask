@@ -31,7 +31,7 @@ public class LocalData {
     }
 
     public int getHour() {
-        return sharedPreferences.getInt(hour, 20);
+        return sharedPreferences.getInt(hour, 8);
     }
 
     public void setHour(int h) {

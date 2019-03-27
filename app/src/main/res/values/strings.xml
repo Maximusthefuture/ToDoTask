@@ -3,4 +3,22 @@
     <string name="settings">Settings</string>
     <string name="vitamin_reminder_notification_title">Time to drink vitamin\'s</string>
     <string name="time_picker_key">time_picker_key</string>
+    <string name="interval_key">interval_key</string>
+    <string name="default_value_interval">5</string>
+    <string name="interval">Interval</string>
+    <string name="ten_min">10</string>
+    <string name="interval_list_key">interval_list_key</string>
+    <string name="pref_ten_min">10</string>
+    <string name="pref_fifteen_min">15</string>
+    <string name="pref_twenty_min">20</string>
+    <string name="text_vitamins">Vitamins</string>
+    <string name="text_news">News</string>
+    <string name="text_calendar">Calendar</string>
+    <string name="more">More</string>
+    <string name="vitamin_name">Название лекарства</string>
+    <string name="time_to_drink">Время приема</string>
+    <string name="text_schedule">Расписание</string>
+    <string name="every_day">Каждый день</string>
+    <string name="choose_day">По опеределенным дням</string>
+    <string name="done_button_text">Готово</string>
 </resources>

@@ -15,13 +15,16 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.Preference;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.example.maximus.vitaminreminder.MainActivity;
 import com.example.maximus.vitaminreminder.R;
 import com.example.maximus.vitaminreminder.sync.ReminderTask;
 import com.example.maximus.vitaminreminder.sync.VitaminReminderIntentService;
+import com.example.maximus.vitaminreminder.timepicker.AlarmReceiver;
 
 import java.util.Calendar;
 
@@ -32,10 +35,18 @@ public class NotificationUtils {
     private static final int PENDING_INTENT_ID = 21331;
     private static final String CHANNEL_ID = "drink-id";
     private static final int DRINKING_NOTIFICATION_ID = 111222;
+    private static boolean isVitaminComplete = false;
+    private static final String TAG = NotificationUtils.class.getSimpleName();
 
+
+    public static void setReminderEveryTenMinutes() {
+
+
+    }
 
 
     public static void setReminder(Context context, Class<?> cls, int hour, int min) {
+
         Calendar calendar = Calendar.getInstance();
 
         Calendar setCalendar = Calendar.getInstance();
@@ -59,17 +70,30 @@ public class NotificationUtils {
 
         Intent intent = new Intent(context, cls);
         PendingIntent pendingIntent =
-                PendingIntent.getService(context, DRINKING_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.getBroadcast(context, DRINKING_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, setCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-    }
 
+
+        if (!isVitaminComplete) {
+            int intervalTwoMin = 1000 * 60 * 1;
+            am.setRepeating(AlarmManager.RTC_WAKEUP, setCalendar.getTimeInMillis(), intervalTwoMin, pendingIntent);
+            Log.d(TAG, "Repeating in 2 min");
+        } else {
+            am.setInexactRepeating(AlarmManager.RTC_WAKEUP, setCalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            isVitaminComplete = true;
+            if (am != null) {
+                am.cancel(pendingIntent);
+            }
+        }
+    }
 
     public static void clearAllNotification(Context context) {
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
+
     }
+
 
     public static void showNotification(Context context) {
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -78,7 +102,7 @@ public class NotificationUtils {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Vitamin drinking";
-            String description = "";
+            String description = "Time to drink vitamins";
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, importance);
             notificationChannel.setDescription(description);
@@ -87,7 +111,7 @@ public class NotificationUtils {
 
         }
 
-        //TODO: Colorful notification ACTION on 26/27 API
+
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setSmallIcon(R.drawable.ic_medicine)
@@ -109,7 +133,6 @@ public class NotificationUtils {
 
         notificationManager.notify(DRINKING_NOTIFICATION_ID, mBuilder.build());
 
-
     }
 
 
@@ -124,16 +147,18 @@ public class NotificationUtils {
 
 
     private static NotificationCompat.Action completeVitaminDrinking(Context context) {
-        Intent intent = new Intent(context, VitaminReminderIntentService.class);
-        intent.setAction(ReminderTask.ACTION_ADD_DOT_SPAN);
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setAction(ReminderTask.ACTION_DISMISS_NOTIFICATION);
 
         PendingIntent changeColorIntent =
-                PendingIntent.getService(context, 3, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-
+                PendingIntent.getActivity(context, DRINKING_NOTIFICATION_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         NotificationCompat.Action vitaminDrinkComplete = new NotificationCompat.Action(
                 R.drawable.ic_medicine__notification, "Drunk", changeColorIntent);
-
-            return vitaminDrinkComplete;
+//        context.startActivity(intent);
+        isVitaminComplete = false;
+        Log.d(TAG, "isVitaminComplete: " + isVitaminComplete);
+        return vitaminDrinkComplete;
 
     }
 
@@ -142,10 +167,11 @@ public class NotificationUtils {
         intent.setAction(ReminderTask.ACTION_DISMISS_NOTIFICATION);
 
         PendingIntent dismissIntent =
-                PendingIntent.getService(context, 5, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.getBroadcast(context, 5, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Action ignore = new NotificationCompat.Action(
+                R.drawable.ic_cancel_black_24px, "No, thanks", dismissIntent);
 
-
-        NotificationCompat.Action ignore = new NotificationCompat.Action(R.drawable.ic_cancel_black_24px, "No, thanks", dismissIntent);
+        isVitaminComplete = true;
 
         return ignore;
     }
@@ -160,14 +186,12 @@ public class NotificationUtils {
                 PackageManager.DONT_KILL_APP);
 
         Intent intent = new Intent(context, cls);
-        PendingIntent pendingIntent = PendingIntent.getService(context, DRINKING_NOTIFICATION_ID, intent,
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DRINKING_NOTIFICATION_ID, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.cancel(pendingIntent);
         pendingIntent.cancel();
     }
-
-
 
 
     private static Bitmap largeIcon(Context context) {

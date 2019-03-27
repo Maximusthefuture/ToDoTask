@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="pref_interval_time_lables">
+        <item>@string/pref_ten_min</item>
+        <item>@string/pref_fifteen_min</item>
+        <item>@string/pref_twenty_min</item>
+    </array>
+
+    <array name="pref_interval_option_value">
+        <item>@string/pref_ten_min</item>
+        <item>@string/pref_fifteen_min</item>
+        <item>@string/pref_twenty_min</item>
+    </array>
+</resources>
