@@ -12,7 +12,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 import com.example.maximus.vitaminreminder.pref.LocalData;
 import com.example.maximus.vitaminreminder.pref.SettingsActivity;
@@ -28,6 +30,7 @@ import java.util.Calendar;
 //TODO: 2: Add bottom navigation bar: DONE
 //Add here 4 bottoms : Calendar, List of Vitamins, Weather, More(There is new Activity, that include settings and other feature): DONE
 //TODO: Add a editable fragment to add add edit time and other things
+//TODO: Нужно вместо Activity использовать Fragments, потому-что мы используем BotttomNavigationBar
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private ImageView vitamin;
     private ImageView vitaminComplete;
@@ -42,6 +45,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        String[] names = { "Иван", "Марья", "Петр", "Антон", "Даша", "Борис",
+                "Костя", "Игорь", "Анна", "Денис", "Андрей" };
+
+
+        ListView lvMain = findViewById(R.id.tasks_list);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
+
+        lvMain.setAdapter(adapter);
 
 
         fab = findViewById(R.id.fab);
