@@ -5,7 +5,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -15,16 +14,14 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.Preference;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.example.maximus.vitaminreminder.MainActivity;
+import com.example.maximus.vitaminreminder.tasks.TasksActivity;
 import com.example.maximus.vitaminreminder.R;
 import com.example.maximus.vitaminreminder.sync.ReminderTask;
 import com.example.maximus.vitaminreminder.sync.VitaminReminderIntentService;
-import com.example.maximus.vitaminreminder.timepicker.AlarmReceiver;
 
 import java.util.Calendar;
 
@@ -137,7 +134,7 @@ public class NotificationUtils {
 
 
     private static PendingIntent contentIntent(Context context) {
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, TasksActivity.class);
 
         return PendingIntent.getActivity(context,
                 PENDING_INTENT_ID,
@@ -147,7 +144,7 @@ public class NotificationUtils {
 
 
     private static NotificationCompat.Action completeVitaminDrinking(Context context) {
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, TasksActivity.class);
         intent.setAction(ReminderTask.ACTION_DISMISS_NOTIFICATION);
 
         PendingIntent changeColorIntent =

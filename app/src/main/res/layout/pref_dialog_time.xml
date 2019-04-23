@@ -4,7 +4,6 @@
     android:id="@+id/time_picker"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:timePickerMode="spinner"
-    >
+    android:timePickerMode="spinner">
 
 </TimePicker>

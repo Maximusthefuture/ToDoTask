@@ -4,15 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.preference.DialogPreference;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.TimePicker;
 import android.text.format.DateFormat;
 import android.widget.Toast;
 
-import com.example.maximus.vitaminreminder.MainActivity;
+import com.example.maximus.vitaminreminder.tasks.TasksActivity;
 import com.example.maximus.vitaminreminder.R;
-import com.example.maximus.vitaminreminder.sync.VitaminReminderIntentService;
 import com.example.maximus.vitaminreminder.timepicker.AlarmReceiver;
 import com.example.maximus.vitaminreminder.utils.NotificationUtils;
 
@@ -41,7 +39,7 @@ public class TimePreferenceDialogFragmentCompat extends PreferenceDialogFragment
                     localData.setHour(hours);
                     localData.setMinute(minute);
                     NotificationUtils.setReminder(getContext(), AlarmReceiver.class, localData.getHour(), localData.getMinute());
-                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    Intent intent = new Intent(getContext(), TasksActivity.class);
                     startActivity(intent);
                     Toast.makeText(getContext(), "Time changed", Toast.LENGTH_SHORT).show();
                 }
