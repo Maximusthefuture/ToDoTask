@@ -26,9 +26,10 @@ public class VitaminRepository implements VitaminTaskRepository {
 
     }
 
-    //TODO: Create DB class or interface (Read about it) dont use room yet
-    //TODO: Create TaskLocalDataSource class or named something else that use a DB class
-    //TODO: Done with saveTask method
+    // Create DB class or interface (Read about it) dont use room yet -- DONE
+    // Create TaskLocalDataSource class or named something else that use a DB class -- DONE
+    // Done with saveTask method -- DONE
+
 //    public static VitaminRepository getInstance(TasksLocalDataSource tasksLocalDataSource) {
 //        if (INSTANCE == null) {
 //            INSTANCE = new VitaminRepository(tasksLocalDataSource);
@@ -50,7 +51,7 @@ public class VitaminRepository implements VitaminTaskRepository {
                 @Override
                 public void onTaskLoaded(List<Task> tasks) {
 
-                    callback.onTaskLoaded(new ArrayList<Task>());
+                    callback.onTaskLoaded(tasks);
                 }
 
                 @Override

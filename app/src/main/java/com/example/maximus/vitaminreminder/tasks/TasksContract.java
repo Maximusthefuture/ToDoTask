@@ -1,5 +1,7 @@
 package com.example.maximus.vitaminreminder.tasks;
 
+import android.content.Context;
+
 import com.example.maximus.vitaminreminder.BasePresenter;
 import com.example.maximus.vitaminreminder.BaseView;
 import com.example.maximus.vitaminreminder.data.Task;
@@ -32,11 +34,11 @@ public interface TasksContract {
 
     interface Presenter extends BasePresenter {
 
-        void start();
+        void start(Context context);
 
         void result(int requestCode, int resultCode);
 
-        void loadTasks(boolean forceUpdate);
+        void loadTasks(boolean forceUpdate, Context context);
 
         void addNewTask();
 

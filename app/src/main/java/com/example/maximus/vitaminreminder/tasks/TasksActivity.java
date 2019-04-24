@@ -95,22 +95,9 @@ public class TasksActivity extends AppCompatActivity implements TasksContract.Vi
 
         disableShiftMode(bottomNavigationView);
 
-
-        //TODO: HOW TO SHOW DATA IN LAYOUT!!?!?!?!?
-//        TaskDbHelper db = new TaskDbHelper(this);
-//        List<Task> tasks = db.getTasks();
-//        for (Task task : tasks) {
-//            String log = "Id: " + task.getId() + " , Title: " + task.getTitle() + " , Time: " + task.getTime();
-//            tasksk.add(task);
-//            Log.d(TAG, log);
-//        }
-
 //        deleteFromDB();
 
-
-
 //        fakeData();
-        //TODO: SEE DATA FROM SQLITE!!!!!!!
 
     }
 
@@ -148,7 +135,7 @@ public class TasksActivity extends AppCompatActivity implements TasksContract.Vi
         super.onResume();
         //TODO: SHOW NOTHING
         //PROBLEM IN THIS METHOD!
-        mPresenter.start();
+        mPresenter.start(this);
     }
 
     @Override
@@ -247,9 +234,9 @@ public class TasksActivity extends AppCompatActivity implements TasksContract.Vi
 
 
 
-    //TODO: 1.Добавить адаптер -- DONE
-    //TODO: 2.Test with fake data -- DONE
-    //TODO: 3.Test Adapter -- DONE
+    // 1.Добавить адаптер -- DONE
+    //2.Test with fake data -- DONE
+    // 3.Test Adapter -- DONE
     private static class TasksAdapter extends BaseAdapter {
         private List<Task> mTasks;
         private TaskItemListener mItemListener;

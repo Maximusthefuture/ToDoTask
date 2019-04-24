@@ -57,7 +57,7 @@ public class TaskDbHelper extends SQLiteOpenHelper implements IDatabaseHandler {
     }
 
     @Override
-    public List<Task> getTasks() {
+    public List<Task> getAllTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TaskEntry.TABLE_NAME;
 
@@ -67,9 +67,9 @@ public class TaskDbHelper extends SQLiteOpenHelper implements IDatabaseHandler {
         if (cursor.moveToFirst()) {
             do {
                 Task task = new Task();
-                task.setId(cursor.getString(0));
-                task.setTitle(cursor.getString(1));
-                task.setTime(cursor.getString(2));
+                task.setId(String.valueOf(cursor.getColumnIndex(TaskEntry._ID)));
+                task.setTitle(cursor.getString(cursor.getColumnIndex(TaskEntry.COLUMN_NAME_TITLE)));
+                task.setTime(cursor.getString(cursor.getColumnIndex(TaskEntry.COLUMN_NAME_TIME)));
                 tasks.add(task);
             } while (cursor.moveToNext());
             }
@@ -77,6 +77,7 @@ public class TaskDbHelper extends SQLiteOpenHelper implements IDatabaseHandler {
         cursor.close();
 
         return tasks;
+
     }
 
     @Override

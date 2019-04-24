@@ -8,7 +8,7 @@ public interface IDatabaseHandler {
 
     void addTask(Task task);
 
-    List<Task> getTasks();
+    List<Task> getAllTasks();
 
     Task getTaskById(String taskId);
 

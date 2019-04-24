@@ -1,16 +1,9 @@
 package com.example.maximus.vitaminreminder.data.source.local;
 
-import android.content.ContentProvider;
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.widget.Toast;
 
 import com.example.maximus.vitaminreminder.data.Task;
-import com.example.maximus.vitaminreminder.data.source.VitaminRepository;
+
 import com.example.maximus.vitaminreminder.data.source.VitaminTaskRepository;
 
 import java.util.ArrayList;
@@ -21,6 +14,8 @@ public class TasksLocalDataSource  implements VitaminTaskRepository {
     private static volatile TasksLocalDataSource INSTANCE;
 
     private TaskDbHelper mTaskDbHelper;
+
+
 
 
     public TasksLocalDataSource(Context context) {
@@ -39,12 +34,12 @@ public class TasksLocalDataSource  implements VitaminTaskRepository {
 //    }
 
 
-    //TODO: STOPPED HERE!!!!!
-
     @Override
     public void getTasks(final LoadTaskCallback callback) {
 
-         List<Task> tasks = mTaskDbHelper.getTasks();
+         List<Task> tasks = mTaskDbHelper.getAllTasks();
+//         List<Task> taskToShow = new ArrayList<>(mTaskDbHelper.getAllTasks());
+//         tasks.add()
          callback.onTaskLoaded(tasks);
 
 

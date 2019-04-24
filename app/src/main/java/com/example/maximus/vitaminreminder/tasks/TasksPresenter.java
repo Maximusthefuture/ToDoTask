@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.example.maximus.vitaminreminder.data.Task;
 import com.example.maximus.vitaminreminder.data.source.VitaminRepository;
 import com.example.maximus.vitaminreminder.data.source.VitaminTaskRepository;
+import com.example.maximus.vitaminreminder.data.source.local.TaskDbHelper;
 import com.example.maximus.vitaminreminder.data.source.local.TasksLocalDataSource;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-//TODO: Реализовать Presenter
+//TODO: Реализовать Presenter до конца
 public class TasksPresenter implements TasksContract.Presenter {
 
     private  TasksContract.View mView;
@@ -27,8 +28,8 @@ public class TasksPresenter implements TasksContract.Presenter {
     }
 
     @Override
-    public void start() {
-        loadTasks(false);
+    public void start(Context context) {
+        loadTasks(false, context);
     }
 
     @Override
@@ -37,11 +38,11 @@ public class TasksPresenter implements TasksContract.Presenter {
     }
 
     @Override
-    public void loadTasks(boolean forceUpdate) {
-        loadTasks();
+    public void loadTasks(boolean forceUpdate, Context context) {
+        loadTasks(context);
     }
 
-    private void loadTasks() {
+    private void loadTasks(final Context context) {
 //        if (showLoadingUI) {
 //            mView.setLoadingIndicator();
 //        }
@@ -52,18 +53,34 @@ public class TasksPresenter implements TasksContract.Presenter {
         mVitaminRepository.getTasks(new VitaminTaskRepository.LoadTaskCallback() {
             @Override
             public void onTaskLoaded(List<Task> tasks) {
+                //Нельзя логику держать в Presenter
+                //WORKING
+
+//                TaskDbHelper db = new TaskDbHelper(context);
+//                List<Task> taskToShow = new ArrayList<>(db.getAllTasks());
+//
+//                processTasks(taskToShow);
+
+//                -------------------------------------------
+
                 List<Task> taskToShow = new ArrayList<>();
+
                 for (Task task : tasks) {
                     taskToShow.add(task);
-                }
 
-                processTasks(tasks);
+                }
+                processTasks(taskToShow);
+//
+//
             }
+
+
 
             @Override
             public void onDataNotAvailable() {
 
             }
+
 
         });
     }
