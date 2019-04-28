@@ -46,5 +46,7 @@ public interface TasksContract {
 
         void activeTask(Task activeTask);
 
+        void deleteAll(Context context);
+
     }
 }
