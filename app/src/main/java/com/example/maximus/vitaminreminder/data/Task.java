@@ -21,6 +21,14 @@ public class Task {
         this.mTime = time;
     }
 
+    public Task(String id, String title, String time) {
+        this.mTitle = title;
+        mCompleted = false;
+        this.mTime = time;
+        this.mId = id;
+    }
+
+
 
     public String getId() {
         return mId;

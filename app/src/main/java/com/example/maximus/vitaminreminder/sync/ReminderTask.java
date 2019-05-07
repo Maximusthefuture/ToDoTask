@@ -1,21 +1,14 @@
 package com.example.maximus.vitaminreminder.sync;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.v7.preference.PreferenceManager;
-import android.view.ContextThemeWrapper;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 
-import com.example.maximus.vitaminreminder.CustomCalendarView;
 import com.example.maximus.vitaminreminder.utils.NotificationUtils;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 public class ReminderTask {
     public static final String KEY_COLOR = "color";

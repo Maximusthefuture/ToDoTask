@@ -38,16 +38,24 @@ public class TasksLocalDataSource  implements VitaminTaskRepository {
     public void getTasks(final LoadTaskCallback callback) {
 
          List<Task> tasks = mTaskDbHelper.getAllTasks();
-//         List<Task> taskToShow = new ArrayList<>(mTaskDbHelper.getAllTasks());
-//         tasks.add()
          callback.onTaskLoaded(tasks);
-
 
     }
 
     @Override
+    public void getTask(String taskId, GetTaskCallback callback) {
+        Task task = mTaskDbHelper.getTaskById(taskId);
+        callback.onTaskLoaded(task);
+    }
+
+    @Override
     public void saveTask(Task task) {
-        mTaskDbHelper.addTask(task);
+        if (task.getId() == null) {
+            mTaskDbHelper.addTask(task);
+        } else {
+            mTaskDbHelper.updateTask(task);
+        }
+
     }
 
     @Override
@@ -63,6 +71,11 @@ public class TasksLocalDataSource  implements VitaminTaskRepository {
     @Override
     public void deleteAllTasks() {
         mTaskDbHelper.deleteTasks();
+    }
+
+    @Override
+    public void setNotificationTime() {
+
     }
 
 }

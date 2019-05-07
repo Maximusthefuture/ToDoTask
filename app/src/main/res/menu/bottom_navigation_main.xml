@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_list_of_vitamins"
+        android:id="@+id/action_tasks"
         android:enabled="true"
         android:icon="@drawable/ic_medicine"
         android:title="@string/text_vitamins"

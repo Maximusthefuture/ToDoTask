@@ -4,4 +4,6 @@ public interface BasePresenter {
 
     void onDestroy();
 
+    void start();
+
 }

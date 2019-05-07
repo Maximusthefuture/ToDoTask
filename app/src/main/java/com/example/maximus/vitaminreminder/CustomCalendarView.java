@@ -1,18 +1,11 @@
 package com.example.maximus.vitaminreminder;
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.widget.CalendarView;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.spans.DotSpan;
-
-import java.util.Calendar;
 
 public class CustomCalendarView implements DayViewDecorator {
     private final int color;

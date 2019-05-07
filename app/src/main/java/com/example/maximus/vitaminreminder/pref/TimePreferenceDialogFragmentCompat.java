@@ -2,13 +2,15 @@ package com.example.maximus.vitaminreminder.pref;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.preference.DialogPreference;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.view.View;
 import android.widget.TimePicker;
 import android.text.format.DateFormat;
 import android.widget.Toast;
 
+import androidx.preference.DialogPreference;
+import androidx.preference.PreferenceDialogFragmentCompat;
+
+import com.example.maximus.vitaminreminder.data.Task;
 import com.example.maximus.vitaminreminder.tasks.TasksActivity;
 import com.example.maximus.vitaminreminder.R;
 import com.example.maximus.vitaminreminder.timepicker.AlarmReceiver;
@@ -34,11 +36,11 @@ public class TimePreferenceDialogFragmentCompat extends PreferenceDialogFragment
 
                 if (timePreference.callChangeListener(minutesAfterMidnight)) {
                     timePreference.setTime(minutesAfterMidnight);
-
+                    Task task = new Task();
                     localData = new LocalData(getContext());
                     localData.setHour(hours);
                     localData.setMinute(minute);
-                    NotificationUtils.setReminder(getContext(), AlarmReceiver.class, localData.getHour(), localData.getMinute());
+                    NotificationUtils.setReminder(getContext(), AlarmReceiver.class, localData.getHour(), localData.getMinute(), task.getTime());
                     Intent intent = new Intent(getContext(), TasksActivity.class);
                     startActivity(intent);
                     Toast.makeText(getContext(), "Time changed", Toast.LENGTH_SHORT).show();

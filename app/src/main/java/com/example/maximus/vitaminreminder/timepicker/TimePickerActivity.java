@@ -3,15 +3,17 @@ package com.example.maximus.vitaminreminder.timepicker;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.maximus.vitaminreminder.R;
+import com.example.maximus.vitaminreminder.data.Task;
 import com.example.maximus.vitaminreminder.pref.LocalData;
 import com.example.maximus.vitaminreminder.tasks.TasksActivity;
 import com.example.maximus.vitaminreminder.utils.NotificationUtils;
@@ -52,7 +54,8 @@ public class TimePickerActivity extends AppCompatActivity {
         putTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NotificationUtils.setReminder(TimePickerActivity.this, AlarmReceiver.class, localData.getHour(), localData.getMinute());
+                Task task = new Task();
+                NotificationUtils.setReminder(TimePickerActivity.this, AlarmReceiver.class, localData.getHour(), localData.getMinute(), task.getTime());
                 Toast.makeText(TimePickerActivity.this, "Time set", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(TimePickerActivity.this, TasksActivity.class);
                 startActivity(intent);

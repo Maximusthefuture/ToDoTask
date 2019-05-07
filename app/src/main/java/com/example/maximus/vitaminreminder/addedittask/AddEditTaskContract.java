@@ -1,7 +1,12 @@
 package com.example.maximus.vitaminreminder.addedittask;
 
+import android.content.Context;
+import android.widget.TextView;
+
 import com.example.maximus.vitaminreminder.BasePresenter;
 import com.example.maximus.vitaminreminder.BaseView;
+
+import java.util.Calendar;
 
 public interface AddEditTaskContract {
 
@@ -9,13 +14,18 @@ public interface AddEditTaskContract {
 
         void showNotificationTime();
 
-        void setTitle(String title);
+        void showTitle(String title);
 
-        void setTime(int hour, int minute);
+        void showTime(String time);
 
         void showEmptyTaskError();
 
         void showTasksList();
+
+        void showEditTask(String taskId);
+
+//        void setTime();
+
 
 
 
@@ -26,9 +36,16 @@ public interface AddEditTaskContract {
 
         void setNotificationTime();
 
-        void saveTask(String title, String time);
+        void saveTask(String title, String time, Context context);
 
-        void createTask(String title, String time);
+        void createTask(String title, String time, Context context);
+
+        void editTask();
+
+        void setTimeInView(Calendar date, Context context, final TextView tvTimePicker);
+
+
+
 
     }
 }

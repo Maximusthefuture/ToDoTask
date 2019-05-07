@@ -25,6 +25,8 @@ public interface VitaminTaskRepository {
 
     void getTasks(LoadTaskCallback callback);
 
+    void getTask(String taskId, GetTaskCallback callback);
+
     void saveTask(Task task);
 
     void completeTask(Task task);
@@ -32,6 +34,8 @@ public interface VitaminTaskRepository {
     void completeTask(String taskId);
 
     void deleteAllTasks();
+
+    void setNotificationTime();
 
 
 }

@@ -3,13 +3,16 @@ package com.example.maximus.vitaminreminder.pref;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.preference.CheckBoxPreference;
-import android.support.v7.preference.EditTextPreference;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceScreen;
+
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceScreen;
+
 import android.widget.Toast;
 
 import com.example.maximus.vitaminreminder.R;
@@ -23,7 +26,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.preferences, rootKey);
+        setPreferencesFromResource(R.xml.settings, rootKey);
         SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
         PreferenceScreen prefScreen = getPreferenceScreen();
         int count = prefScreen.getPreferenceCount();
@@ -37,14 +40,13 @@ public class SettingsFragment extends PreferenceFragmentCompat
             }
         }
 
-
 //        Preference preference = findPreference(getString(R.string.interval_key));
 //        preference.setOnPreferenceChangeListener(this);
 
-
-
-
     }
+
+
+
 
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
@@ -76,7 +78,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
         }
     }
 
-
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             Preference preference = findPreference(key);
@@ -86,7 +87,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
                     setPreferenceSummary(preference, value);
                 }
             }
-
     }
 
     @Override
@@ -123,4 +123,5 @@ public class SettingsFragment extends PreferenceFragmentCompat
         super.onCreate(savedInstanceState);
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
+
 }

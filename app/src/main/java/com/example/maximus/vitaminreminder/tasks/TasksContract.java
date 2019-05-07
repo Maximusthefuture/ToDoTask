@@ -13,13 +13,17 @@ public interface TasksContract {
 
     interface View extends BaseView<Presenter>{
 
-        void setLoadingIndicator();
+        void setLoadingIndicator(boolean active);
 
         void showTasks(List<Task> tasks);
 
         void showTaskDetailUi(String taskId);
 
         void showAddTask();
+
+        boolean isActive();
+
+        void showSuccessfullySavedMessage();
 
         //???
         void setBottomNavigationView();
@@ -47,6 +51,8 @@ public interface TasksContract {
         void activeTask(Task activeTask);
 
         void deleteAll(Context context);
+
+        void completeTask(Task completedTask);
 
     }
 }

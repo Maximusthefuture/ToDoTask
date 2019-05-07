@@ -39,14 +39,7 @@ public class VitaminRepository implements VitaminTaskRepository {
 
     @Override
     public void getTasks(final LoadTaskCallback callback) {
-//        if (mCachedTasks != null && !mCacheIsDirty) {
-//            callback.onTaskLoaded(new ArrayList<Task>());
-//            return;
-//        }
-//
-//        if (mCacheIsDirty) {
-//
-//        } else {
+
             mTaskLocalDataSource.getTasks(new LoadTaskCallback() {
                 @Override
                 public void onTaskLoaded(List<Task> tasks) {
@@ -63,8 +56,29 @@ public class VitaminRepository implements VitaminTaskRepository {
     }
 
     @Override
+    public void getTask(String taskId, final GetTaskCallback callback) {
+//        Task cachedTask = getTaskWithId(taskId);
+
+        mTaskLocalDataSource.getTask(taskId, new GetTaskCallback() {
+            @Override
+            public void onTaskLoaded(Task task) {
+//                task = new Task(task.getId(), task.getTitle(), task.getTime());
+//                mCachedTasks.put(task.getId(), task);
+                callback.onTaskLoaded(task);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
+    }
+
+    @Override
     public void saveTask(Task task) {
         mTaskLocalDataSource.saveTask(task);
+//        mCachedTasks.put(task.getId(), task);
+
 
 //        if (mCachedTasks == null) {
 //            mCachedTasks = new LinkedHashMap<>();
@@ -86,4 +100,11 @@ public class VitaminRepository implements VitaminTaskRepository {
     public void deleteAllTasks() {
         mTaskLocalDataSource.deleteAllTasks();
     }
+
+    @Override
+    public void setNotificationTime() {
+
+    }
+
+
 }

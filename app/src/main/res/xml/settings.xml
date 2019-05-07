@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--&lt;!&ndash;TODO ADD ICONS&ndash;&gt;-->
+    <!--<PreferenceCategory-->
+        <!--app:key="settings_category"-->
+        <!--app:title="@string/settings">-->
 
     <com.example.maximus.vitaminreminder.pref.TimePreference
         android:key="key4"
@@ -25,6 +32,26 @@
         android:entries="@array/pref_interval_time_lables"
         android:entryValues="@array/pref_interval_option_value"
         />
+    <!--</PreferenceCategory>-->
+
+
+    <!--<PreferenceCategory-->
+        <!--app:key="account_category"-->
+        <!--android:title="@string/account_settings">-->
+
+
+        <!--<Preference-->
+            <!--android:key="create_account"-->
+            <!--android:title="@string/create_account"-->
+            <!--android:summary="@string/create_account_summary"-->
+            <!--android:icon="@drawable/ic_baseline_list_24px"/>-->
+
+        <!--<Preference-->
+            <!--android:key="enter_in_app"-->
+            <!--android:title="@string/enter_in_app"-->
+            <!--android:summary="@string/enter_in_app_summary"/>-->
+
+    <!--</PreferenceCategory>-->
 
 
     <!--<EditTextPreference-->

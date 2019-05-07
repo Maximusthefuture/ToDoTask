@@ -14,8 +14,8 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 
 import com.example.maximus.vitaminreminder.tasks.TasksActivity;
@@ -42,9 +42,15 @@ public class NotificationUtils {
     }
 
 
-    public static void setReminder(Context context, Class<?> cls, int hour, int min) {
+    public static void setReminder(Context context, Class<?> cls, int hour, int min, String time) {
 
         Calendar calendar = Calendar.getInstance();
+
+//
+//        int minutes = Integer.parseInt(time.substring(1));
+//        int hours = Integer.parseInt(time.substring(2));
+
+//        Log.d(TAG, "hour: " + hour + "minutes : " + minutes);
 
         Calendar setCalendar = Calendar.getInstance();
         setCalendar.set(Calendar.HOUR_OF_DAY, hour);

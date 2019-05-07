@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.example.maximus.vitaminreminder.data.Task;
 import com.example.maximus.vitaminreminder.pref.LocalData;
 import com.example.maximus.vitaminreminder.sync.ReminderTask;
 import com.example.maximus.vitaminreminder.sync.VitaminReminderIntentService;
@@ -33,7 +34,8 @@ public class AlarmReceiver extends BroadcastReceiver {
             Log.d(TAG, "OnReceive: BOOT COMPLETED");
 
             LocalData localData = new LocalData(context);
-            NotificationUtils.setReminder(context, AlarmReceiver.class, localData.getHour(), localData.getMinute());
+            Task task = new Task();
+            NotificationUtils.setReminder(context, AlarmReceiver.class, localData.getHour(), localData.getMinute(), task.getTime());
             return;
         }
     }

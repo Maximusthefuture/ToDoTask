@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--TODO ADD ICONS-->
+    <PreferenceCategory
+        app:key="settings_category"
+        app:title="@string/settings">
+
+        <!--<com.example.maximus.vitaminreminder.pref.TimePreference-->
+            <!--android:key="key4"-->
+            <!--android:title="TimePreference"-->
+            <!--android:summary="Time Summary"-->
+            <!--android:defaultValue="90"-->
+            <!--/>-->
+
+
+        <!--<CheckBoxPreference-->
+            <!--android:key="notification_key"-->
+            <!--android:title="Notification"-->
+            <!--android:defaultValue="false"-->
+            <!--android:summaryOn="YES"-->
+            <!--android:summaryOff="NO"/>-->
+
+
+        <!--<ListPreference-->
+            <!--android:defaultValue="@string/ten_min"-->
+            <!--android:dialogTitle="Choose interval"-->
+            <!--android:key="@string/interval_list_key"-->
+            <!--android:title="Choose Interval"-->
+            <!--android:entries="@array/pref_interval_time_lables"-->
+            <!--android:entryValues="@array/pref_interval_option_value"-->
+            <!--/>-->
+
+        <Preference
+            android:id="@+id/setting_container"
+            android:key="settings"
+            android:title="@string/settings">
+            <!--<intent-->
+                <!--android:targetPackage="com.example"-->
+                <!--android:targetClass="com.example.maximus.vitaminreminder.pref.SettingsActivity"/>-->
+        </Preference>
+            <!--android:fragment="com.example.maximus.vitaminreminder.pref.SettingsFragment"-->
+
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        app:key="account_category"
+        android:title="@string/account_settings">
+
+
+        <Preference
+            android:key="create_account"
+            android:title="@string/create_account"
+            android:summary="@string/create_account_summary"
+            android:icon="@drawable/ic_baseline_list_24px"/>
+
+        <Preference
+            android:key="enter_in_app"
+            android:title="@string/enter_in_app"
+            android:summary="@string/enter_in_app_summary"/>
+
+    </PreferenceCategory>
+
+
+    <!--<EditTextPreference-->
+    <!--android:key="@string/interval_key"-->
+    <!--android:defaultValue="@string/default_value_interval"-->
+    <!--android:title="@string/interval"/>-->
+
+</PreferenceScreen>

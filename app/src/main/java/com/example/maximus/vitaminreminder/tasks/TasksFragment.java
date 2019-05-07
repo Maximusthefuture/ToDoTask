@@ -1,54 +1,46 @@
 package com.example.maximus.vitaminreminder.tasks;
 
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.maximus.vitaminreminder.R;
+import com.example.maximus.vitaminreminder.addedittask.AddEditTaskActivity;
+import com.example.maximus.vitaminreminder.addedittask.AddEditTaskFragment;
+import com.example.maximus.vitaminreminder.data.Task;
+import com.example.maximus.vitaminreminder.pref.SettingsActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link TasksFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link TasksFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class TasksFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import java.util.ArrayList;
+import java.util.List;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+public class TasksFragment extends Fragment implements TasksContract.View {
 
-    public TasksFragment() {
-        // Required empty public constructor
-    }
+    private static final String ARGUMENT_TASK_ID = "TASK_ID";
+    private static final int REQUEST_ADD_TASK = 1;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TasksFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TasksFragment newInstance(String param1, String param2) {
+    private TasksAdapter mListAdapter;
+    private TasksContract.Presenter mPresenter;
+    FloatingActionButton fab;
+    ArrayList<Task> tasks = new ArrayList<>();
+
+
+
+    public static TasksFragment newInstance(String taskId) {
         TasksFragment fragment = new TasksFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARGUMENT_TASK_ID, taskId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,56 +48,209 @@ public class TasksFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        mListAdapter = new TasksAdapter(tasks, taskItemListener);
+        mPresenter = new TasksPresenter(this, getContext());
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.start(getContext());
+    }
+
+    @Override
+    public void setPresenter(TasksContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mPresenter.result(requestCode, resultCode);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        TextView textView = new TextView(getActivity());
-        textView.setText(R.string.hello_blank_fragment);
-        return textView;
+
+        View root = inflater.inflate(R.layout.tasks_frag, container, false);
+
+        ListView lvMain = root.findViewById(R.id.tasks_list);
+        lvMain.setAdapter(mListAdapter);
+
+
+
+        fab = root.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.addNewTask();
+            }
+        });
+
+        setHasOptionsMenu(true);
+
+        return  root;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.settings:
+                Intent intent = new Intent(getContext(), SettingsActivity.class);
+                startActivity(intent);
+            case R.id.delete_all:
+                mPresenter.deleteAll(getContext());
+
+            default:
+                super.onOptionsItemSelected(item);
         }
+        return true;
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main, menu);
+    }
+
+    TaskItemListener taskItemListener = new TaskItemListener() {
+        @Override
+        public void onTaskClick(Task clickedTask) {
+            mPresenter.openTaskDetails(clickedTask);
+
         }
+    };
+
+    private static class TasksAdapter extends BaseAdapter {
+        private List<Task> mTasks;
+        private TaskItemListener mItemListener;
+
+        public TasksAdapter(ArrayList<Task> task, TaskItemListener itemListener) {
+
+            this.mTasks = task;
+            mItemListener = itemListener;
+
+        }
+
+        private void setList(List<Task> tasks) {
+            if (!tasks.isEmpty()) {
+                mTasks = tasks;
+//            } else {
+//                throw new NullPointerException("TasksActivity");
+            }
+        }
+
+        public void replaceData(List<Task> tasks) {
+            setList(tasks);
+            notifyDataSetChanged();
+        }
+
+
+        @Override
+        public int getCount() {
+            return mTasks.size();
+        }
+
+        @Override
+        public Task getItem(int position) {
+            return mTasks.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View rowView = convertView;
+            if (rowView == null) {
+                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+                rowView = inflater.inflate(R.layout.task_item, parent, false);
+            }
+
+            final Task task = getItem(position);
+
+            TextView title = rowView.findViewById(R.id.vitamin_name);
+            title.setText(task.getTitle());
+
+            TextView time = rowView.findViewById(R.id.time);
+            time.setText(task.getTime());
+
+
+
+            rowView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mItemListener.onTaskClick(task);
+                }
+            });
+
+            return rowView;
+        }
+
+    }
+
+    public interface TaskItemListener {
+
+        void onTaskClick(Task clickedTask);
+
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.onDestroy();
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void setLoadingIndicator(boolean active) {
+
+    }
+
+    @Override
+    public void showTasks(List<Task> tasks) {
+        mListAdapter.replaceData(tasks);
+    }
+
+    @Override
+    public void showTaskDetailUi(String taskId) {
+        Intent intent = new Intent(getContext(), AddEditTaskActivity.class);
+        intent.putExtra(AddEditTaskFragment.ARGUMENT_EXTRA_TASK_ID, taskId);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void showAddTask() {
+        Intent intent = new Intent(getContext(), AddEditTaskActivity.class);
+        startActivityForResult(intent, REQUEST_ADD_TASK);
+    }
+
+    @Override
+    public boolean isActive() {
+        return false;
+    }
+
+    @Override
+    public void showSuccessfullySavedMessage() {
+
+    }
+
+    @Override
+    public void setBottomNavigationView() {
+
+    }
+
+    @Override
+    public void showNoTasks() {
+
+    }
+
+    @Override
+    public void showNotification() {
+
     }
 }

@@ -18,6 +18,10 @@ public interface IDatabaseHandler {
 
     int deleteCompletedTasks();
 
+    void updateTask(Task task);
+
     void updateCompleted(String taskId, boolean completed);
+
+
 
 }

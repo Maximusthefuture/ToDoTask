@@ -2,10 +2,12 @@ package com.example.maximus.vitaminreminder.pref;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.preference.DialogPreference;
+
 import android.util.AttributeSet;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.preference.DialogPreference;
 
 import com.example.maximus.vitaminreminder.R;
 

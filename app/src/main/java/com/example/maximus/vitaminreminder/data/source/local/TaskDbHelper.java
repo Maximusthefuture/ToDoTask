@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.example.maximus.vitaminreminder.data.Task;
 import com.example.maximus.vitaminreminder.data.source.local.TaskContract.*;
@@ -21,7 +21,7 @@ public class TaskDbHelper extends SQLiteOpenHelper implements IDatabaseHandler {
 
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TaskEntry.TABLE_NAME + " (" +
-                    TaskEntry._ID + " INTEGER PRIMARY KEY," +
+                    TaskEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     TaskEntry.COLUMN_NAME_TITLE + " TEXT," +
                     TaskEntry.COLUMN_NAME_TIME + " TEXT)";
 
@@ -49,6 +49,7 @@ public class TaskDbHelper extends SQLiteOpenHelper implements IDatabaseHandler {
     public void addTask(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(TaskEntry._ID, task.getId());
         values.put(TaskEntry.COLUMN_NAME_TITLE, task.getTitle());
         values.put(TaskEntry.COLUMN_NAME_TIME, task.getTime());
 
@@ -67,7 +68,7 @@ public class TaskDbHelper extends SQLiteOpenHelper implements IDatabaseHandler {
         if (cursor.moveToFirst()) {
             do {
                 Task task = new Task();
-                task.setId(String.valueOf(cursor.getColumnIndex(TaskEntry._ID)));
+                task.setId(cursor.getString(cursor.getColumnIndex(TaskEntry._ID)));  //SUKA MRAZ!!! DONT USE String.valueOf WITH STRINGS!!! SHIET!
                 task.setTitle(cursor.getString(cursor.getColumnIndex(TaskEntry.COLUMN_NAME_TITLE)));
                 task.setTime(cursor.getString(cursor.getColumnIndex(TaskEntry.COLUMN_NAME_TIME)));
                 tasks.add(task);
@@ -82,6 +83,21 @@ public class TaskDbHelper extends SQLiteOpenHelper implements IDatabaseHandler {
 
     @Override
     public Task getTaskById(String taskId) {
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String getQuery = "SELECT * FROM " + TaskEntry.TABLE_NAME + " WHERE " + TaskEntry._ID  + "=" + taskId;
+//        Cursor cursor = db.rawQuery("SELECT * FROM " + TaskEntry.TABLE_NAME + " WHERE " + TaskEntry._ID + "=?", new String[] {taskId} , null);
+        Cursor cursor = db.rawQuery(getQuery, null);
+//        Cursor cursor = db.query(TaskEntry.TABLE_NAME, new String[] { TaskEntry._ID,}, TaskEntry._ID + "=?",
+//                new String[] { taskId }, null, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                Task task = new Task(cursor.getString(cursor.getColumnIndex(TaskEntry._ID)), cursor.getString(cursor.getColumnIndex(TaskEntry.COLUMN_NAME_TITLE))
+                        , cursor.getString(cursor.getColumnIndex(TaskEntry.COLUMN_NAME_TIME)));
+                return task;
+            }
+        }
         return null;
     }
 
@@ -100,6 +116,15 @@ public class TaskDbHelper extends SQLiteOpenHelper implements IDatabaseHandler {
     @Override
     public int deleteCompletedTasks() {
         return 0;
+    }
+
+    @Override
+    public void updateTask(Task task) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(TaskEntry.COLUMN_NAME_TITLE, task.getTitle());
+        values.put(TaskEntry.COLUMN_NAME_TIME, task.getTime());
+        db.update(TaskEntry.TABLE_NAME, values, TaskEntry._ID + " = ?", new String[]{task.getId()});
     }
 
     @Override
