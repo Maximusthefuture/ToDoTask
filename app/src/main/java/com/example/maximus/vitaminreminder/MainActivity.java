@@ -3,23 +3,32 @@ package com.example.maximus.vitaminreminder;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.drawerlayout.widget.DrawerLayout;
+
+
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
-;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.example.maximus.vitaminreminder.calendar.CalendarFragment;
 import com.example.maximus.vitaminreminder.more_options.MoreOptionFragment;
 import com.example.maximus.vitaminreminder.more_options.MoreOptionsActivity;
 import com.example.maximus.vitaminreminder.news_list.NewsFragment;
 import com.example.maximus.vitaminreminder.tasks.TasksFragment;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -33,7 +42,10 @@ public class MainActivity extends AppCompatActivity {
     final Fragment newsFragment = new NewsFragment();
     final Fragment settingFragment = new MoreOptionFragment();
     final FragmentManager fm = getSupportFragmentManager();
+    private LinearLayout linearLayoutToolbar;
     Fragment active = tasksFragment;
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle toggle;
 
 
     private BottomNavigationView bottomNavigationView;
@@ -46,7 +58,16 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        linearLayoutToolbar = findViewById(R.id.linear_toolbar);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+
         bottomNavigationView = findViewById(R.id.nav_bottom_view);
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
+
+        drawerLayout.addDrawerListener(toggle);
+
 
 //        disableShiftMode(bottomNavigationView);
 
@@ -56,6 +77,20 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().add(R.id.main_container, newsFragment, "3").hide(newsFragment).commit();
         fm.beginTransaction().add(R.id.main_container, calendarFragment, "2").hide(calendarFragment).commit();
         fm.beginTransaction().add(R.id.main_container, tasksFragment, "1").commit();
+
+
+        openDrawerOnClickInAccount();
+    }
+
+
+    public void openDrawerOnClickInAccount() {
+        linearLayoutToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
     }
 
 

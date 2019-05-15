@@ -31,4 +31,6 @@
     <string name="enter_in_app">Войти</string>
     <string name="enter_in_app_summary">Вход для зарегистрированного пользователя</string>
     <string name="create_account_summary">Создать бесплатный аккаунт</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>
