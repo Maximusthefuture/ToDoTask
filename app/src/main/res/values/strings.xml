@@ -33,4 +33,16 @@
     <string name="create_account_summary">Создать бесплатный аккаунт</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="notification">Уведомления</string>
+    <string name="add_notification">Добавить уведомление</string>
+    <string name="alarm">Будильник</string>
+    <string name="set_alarm">Установить будильник</string>
+    <string name="preference">Общие настройки</string>
+    <string name="done_text">Выполнено</string>
+    <string name="delete_text">Удаленное</string>
+    <string name="archive_text">Архив</string>
+    <string name="saved_text">Сохранено</string>
+    <string name="nothing">Ничего</string>
+    <string name="please_check_connection">Проверьте ваше соединение, и попробуйте снова.</string>
+    <string name="delete_button_text">Удалить</string>
 </resources>

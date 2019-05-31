@@ -68,7 +68,7 @@ public class TaskDbHelper extends SQLiteOpenHelper implements IDatabaseHandler {
         if (cursor.moveToFirst()) {
             do {
                 Task task = new Task();
-                task.setId(cursor.getString(cursor.getColumnIndex(TaskEntry._ID)));  //SUKA MRAZ!!! DONT USE String.valueOf WITH STRINGS!!! SHIET!
+                task.setId(cursor.getString(cursor.getColumnIndex(TaskEntry._ID)));
                 task.setTitle(cursor.getString(cursor.getColumnIndex(TaskEntry.COLUMN_NAME_TITLE)));
                 task.setTime(cursor.getString(cursor.getColumnIndex(TaskEntry.COLUMN_NAME_TIME)));
                 tasks.add(task);
@@ -84,13 +84,12 @@ public class TaskDbHelper extends SQLiteOpenHelper implements IDatabaseHandler {
     @Override
     public Task getTaskById(String taskId) {
 
-
         SQLiteDatabase db = this.getReadableDatabase();
+
         String getQuery = "SELECT * FROM " + TaskEntry.TABLE_NAME + " WHERE " + TaskEntry._ID  + "=" + taskId;
-//        Cursor cursor = db.rawQuery("SELECT * FROM " + TaskEntry.TABLE_NAME + " WHERE " + TaskEntry._ID + "=?", new String[] {taskId} , null);
+
         Cursor cursor = db.rawQuery(getQuery, null);
-//        Cursor cursor = db.query(TaskEntry.TABLE_NAME, new String[] { TaskEntry._ID,}, TaskEntry._ID + "=?",
-//                new String[] { taskId }, null, null, null, null);
+
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 Task task = new Task(cursor.getString(cursor.getColumnIndex(TaskEntry._ID)), cursor.getString(cursor.getColumnIndex(TaskEntry.COLUMN_NAME_TITLE))
@@ -101,9 +100,14 @@ public class TaskDbHelper extends SQLiteOpenHelper implements IDatabaseHandler {
         return null;
     }
 
+    //TODO
     @Override
-    public int deleteTaskById(String taskId) {
-        return 0;
+    public void deleteTaskById(String taskId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TaskEntry.TABLE_NAME + " WHERE " + TaskEntry._ID + "=" + taskId);
+        db.close();
+
+
     }
 
     @Override
@@ -131,4 +135,7 @@ public class TaskDbHelper extends SQLiteOpenHelper implements IDatabaseHandler {
     public void updateCompleted(String taskId, boolean completed) {
 
     }
+
+
+
 }

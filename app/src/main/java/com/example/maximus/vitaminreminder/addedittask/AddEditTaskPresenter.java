@@ -126,6 +126,13 @@ public class AddEditTaskPresenter implements AddEditTaskContract.Presenter, Task
         timePickerDialog.show();
     }
 
+    @Override
+    public void deleteTask() {
+
+        repository.deleteTask(mTaskId);
+        mAddTaskView.showTasksList();
+
+    }
 
 
 }

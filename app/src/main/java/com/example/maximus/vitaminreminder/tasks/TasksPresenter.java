@@ -1,6 +1,9 @@
 package com.example.maximus.vitaminreminder.tasks;
 
+import android.app.Activity;
 import android.content.Context;
+
+import com.example.maximus.vitaminreminder.addedittask.AddEditTaskActivity;
 import com.example.maximus.vitaminreminder.data.Task;
 import com.example.maximus.vitaminreminder.data.source.VitaminRepository;
 import com.example.maximus.vitaminreminder.data.source.VitaminTaskRepository;
@@ -8,11 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-//TODO: Реализовать Presenter до конца
+
 public class TasksPresenter implements TasksContract.Presenter {
 
     private TasksContract.View mView;
+
     private VitaminRepository mVitaminRepository;
+
+    private boolean mFirstLoad = true;
 
 
     public TasksPresenter(TasksContract.View taskView, Context context) {
@@ -22,22 +28,20 @@ public class TasksPresenter implements TasksContract.Presenter {
     }
 
     @Override
-    public void start(Context context) {
-        loadTasks(false, context);
+    public void start() {
+        loadTasks();
     }
 
     @Override
     public void result(int requestCode, int resultCode) {
+        if (AddEditTaskActivity.REQUEST_ADD_TASK == requestCode && Activity.RESULT_OK == resultCode) {
+            mView.showSuccessfullySavedMessage();
+        }
 
     }
 
     @Override
-    public void loadTasks(boolean forceUpdate, Context context) {
-        loadTasks(context);
-    }
-
-    private void loadTasks(final Context context) {
-
+    public void loadTasks() {
         mVitaminRepository.getTasks(new VitaminTaskRepository.LoadTaskCallback() {
             @Override
             public void onTaskLoaded(List<Task> tasks) {
@@ -47,7 +51,8 @@ public class TasksPresenter implements TasksContract.Presenter {
                     taskToShow.add(task);
 
                 }
-                processTasks(taskToShow);
+
+               checkTasks(taskToShow);
 
             }
 
@@ -59,9 +64,6 @@ public class TasksPresenter implements TasksContract.Presenter {
         });
     }
 
-    private void processTasks(List<Task> tasks) {
-        mView.showTasks(tasks);
-    }
 
     @Override
     public void addNewTask() {
@@ -73,15 +75,14 @@ public class TasksPresenter implements TasksContract.Presenter {
         mView.showTaskDetailUi(requestTask.getId());
     }
 
-    @Override
-    public void activeTask(Task activeTask) { }
 
     @Override
     public void deleteAll(Context context) {
         mVitaminRepository.deleteAllTasks();
-        loadTasks(context);
-
+        loadTasks();
     }
+
+
 
     @Override
     public void completeTask(Task completedTask) {
@@ -93,8 +94,13 @@ public class TasksPresenter implements TasksContract.Presenter {
         this.mView = null;
     }
 
-    @Override
-    public void start() {
-
+    private void checkTasks(List<Task> tasks) {
+        if (tasks.isEmpty()) {
+            mView.showNoTasks();
+        } else {
+            mView.showTasks(tasks);
+        }
     }
+
+
 }

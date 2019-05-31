@@ -44,6 +44,8 @@ public interface AddEditTaskContract {
 
         void setTimeInView(Calendar date, Context context, final TextView tvTimePicker);
 
+        void deleteTask();
+
 
 
 

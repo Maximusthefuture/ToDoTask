@@ -14,7 +14,7 @@ public interface NewsContract {
 
         void showNoNews();
 
-        void showLoadingIndicator();
+        void showLoadingIndicator(boolean active);
 
         void setDataToRecyclerView(List<News> newsArrayList);
     }
@@ -22,7 +22,7 @@ public interface NewsContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadNews();
+        void loadNews(boolean forceUpdate);
 
     }
 }

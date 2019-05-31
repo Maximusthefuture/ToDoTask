@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.maximus.vitaminreminder.news_list.ScrollSwipeRefreshLayout
+    android:id="@+id/refresh_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".news_list.NewsFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
 
 
 
@@ -24,6 +29,18 @@
       <!--android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
       <!--android:text="HELLO THIS"/>-->
 
+  <TextView
+      android:id="@+id/please_check_connection"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/please_check_connection"
+      android:paddingTop="40dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"/>
+      <!--android:visibility="invisible"/>-->
+
 
   <ProgressBar
 
@@ -35,10 +52,13 @@
       app:layout_constraintRight_toLeftOf="parent"
       app:layout_constraintTop_toBottomOf="parent"
       app:layout_constraintBottom_toTopOf="parent"
-      android:visibility="invisible"/>
+      android:visibility="invisible"
+     />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.example.maximus.vitaminreminder.news_list.ScrollSwipeRefreshLayout>

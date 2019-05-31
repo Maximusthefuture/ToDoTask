@@ -16,10 +16,6 @@ public class VitaminRepository implements VitaminTaskRepository {
 
     public TasksLocalDataSource mTaskLocalDataSource;
 
-    Map<String, Task> mCachedTasks;
-
-
-    boolean mCacheIsDirty = false;
 
     public VitaminRepository(Context context) {
         mTaskLocalDataSource = new TasksLocalDataSource(context);
@@ -84,6 +80,11 @@ public class VitaminRepository implements VitaminTaskRepository {
 //            mCachedTasks = new LinkedHashMap<>();
 //        }
 //        mCachedTasks.put(task.getId(), task);
+    }
+
+    @Override
+    public void deleteTask(String taskId) {
+        mTaskLocalDataSource.deleteTask(taskId);
     }
 
     @Override

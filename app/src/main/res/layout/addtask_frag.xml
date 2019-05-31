@@ -281,5 +281,18 @@
         android:background="@android:color/holo_red_dark"/>
 
 
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_button_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="visible"
+        android:background="@color/colorPrimaryDark"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

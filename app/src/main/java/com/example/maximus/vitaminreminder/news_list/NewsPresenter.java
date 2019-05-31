@@ -8,11 +8,11 @@ import java.util.List;
 
 
 //TODO
-public class NewsPresenter implements NewsContract.Presenter, NewsListRepository.OnFinishedListener {
+public class NewsPresenter implements NewsContract.Presenter {
 
     private NewsContract.View mView;
 
-    NewsListRepository newsRepository;
+    private NewsListRepository newsRepository;
 
 
     public NewsPresenter(NewsContract.View mView) {
@@ -21,28 +21,49 @@ public class NewsPresenter implements NewsContract.Presenter, NewsListRepository
     }
 
     @Override
-    public void loadNews() {
-        newsRepository.getNewsList(this, "medicine");
+    public void loadNews(boolean forceUpdate) {
+        loadNews(forceUpdate, true);
     }
+
+
+    private void loadNews(boolean forceUpdate, final boolean showLoadingUi) {
+
+            if (showLoadingUi) {
+                mView.showLoadingIndicator(true);
+            }
+            newsRepository.getNewsList(new NewsListRepository.OnFinishedListener() {
+                @Override
+                public void onFinished(List<News> newsArrayList) {
+
+                    mView.setDataToRecyclerView(newsArrayList);
+                    mView.showNews();
+
+                    if (showLoadingUi) {
+                        mView.showLoadingIndicator(false);
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    mView.showNoNews();
+                    mView.showLoadingIndicator(false);
+                }
+            }, "medicine");
+
+        }
+
+
+
 
     @Override
     public void onDestroy() {
-
+        this.mView = null;
     }
 
     @Override
     public void start() {
-        newsRepository.getNewsList(this, "medicine");
-    }
-
-
-    @Override
-    public void onFinished(List<News> newsArrayList) {
-        mView.setDataToRecyclerView(newsArrayList);
-    }
-
-    @Override
-    public void onFailure(Throwable t) {
+      loadNews(false);
 
     }
+
 }

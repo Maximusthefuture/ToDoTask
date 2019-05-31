@@ -12,7 +12,7 @@ public interface IDatabaseHandler {
 
     Task getTaskById(String taskId);
 
-    int deleteTaskById(String taskId);
+    void deleteTaskById(String taskId);
 
     void deleteTasks();
 

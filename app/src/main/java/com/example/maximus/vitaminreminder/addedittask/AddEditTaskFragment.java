@@ -7,11 +7,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.maximus.vitaminreminder.R;
 
@@ -22,7 +22,8 @@ public class AddEditTaskFragment extends Fragment implements AddEditTaskContract
     public static final String ARGUMENT_EXTRA_TASK_ID = "TASK_ID";
 
     private AddEditTaskContract.Presenter mPresenter;
-    private Button button;
+    private Button saveButton;
+    private Button deleteButton;
     private TextView mTitle;
     Calendar date = Calendar.getInstance();
     int hour;
@@ -50,14 +51,15 @@ public class AddEditTaskFragment extends Fragment implements AddEditTaskContract
 
         mTitle = root.findViewById(R.id.text_name_vitamin);
         tvTimePicker = root.findViewById(R.id.time_picker);
-        button = root.findViewById(R.id.save_button);
+        saveButton = root.findViewById(R.id.save_button);
+        deleteButton = root.findViewById(R.id.delete_button);
         hour = Calendar.HOUR_OF_DAY;
         minutes = Calendar.MINUTE;
 
-        button.setOnClickListener(new View.OnClickListener(){
+        saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Done", Toast.LENGTH_SHORT).show();
+
                 mPresenter.saveTask(mTitle.getText().toString(), tvTimePicker.getText().toString(), getContext());
             }
         });
@@ -67,6 +69,16 @@ public class AddEditTaskFragment extends Fragment implements AddEditTaskContract
             @Override
             public void onClick(View v) {
                 mPresenter.setTimeInView(date, getContext(), tvTimePicker);
+            }
+        });
+
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mPresenter.deleteTask();
+
             }
         });
 

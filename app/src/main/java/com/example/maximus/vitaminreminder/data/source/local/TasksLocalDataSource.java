@@ -59,6 +59,11 @@ public class TasksLocalDataSource  implements VitaminTaskRepository {
     }
 
     @Override
+    public void deleteTask(String taskId) {
+        mTaskDbHelper.deleteTaskById(taskId);
+    }
+
+    @Override
     public void completeTask(Task task) {
 
     }

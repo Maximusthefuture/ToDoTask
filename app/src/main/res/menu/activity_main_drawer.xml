@@ -3,19 +3,16 @@
 
 
   <item
-      android:title="Fragment1"/>
+      android:title="@string/done_text"/>
 
 
 
     <item
-        android:title="Fragment1"/>
+        android:title="@string/delete_text"/>
 
 
     <item
-        android:title="Fragment1"/>
+        android:title="@string/archive_text"/>
 
-
-    <item
-        android:title="Fragment1"/>
 
 </menu>

@@ -35,6 +35,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.lang.reflect.Field;
 
+
+//TODO: ADD TESTING!
+//TODO: Add authorization
+//TODO: ADD Notification
+//TODO: Add CustomCalendar
 public class MainActivity extends AppCompatActivity {
 
     final Fragment tasksFragment = new TasksFragment();

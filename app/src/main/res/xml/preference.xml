@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!--TODO ADD ICONS-->
-    <PreferenceCategory
-        app:key="settings_category"
-        app:title="@string/settings">
+
 
         <!--<com.example.maximus.vitaminreminder.pref.TimePreference-->
             <!--android:key="key4"-->
@@ -32,6 +30,10 @@
             <!--android:entryValues="@array/pref_interval_option_value"-->
             <!--/>-->
 
+    <PreferenceCategory
+        app:key="preference"
+        android:title="@string/preference">
+
         <Preference
             android:id="@+id/setting_container"
             android:key="settings"
@@ -42,8 +44,10 @@
         </Preference>
             <!--android:fragment="com.example.maximus.vitaminreminder.pref.SettingsFragment"-->
 
-
     </PreferenceCategory>
+
+
+
 
 
     <PreferenceCategory
@@ -63,6 +67,29 @@
             android:summary="@string/enter_in_app_summary"/>
 
     </PreferenceCategory>
+
+    <!--TODO: Add this in settings category-->
+
+    <!--<PreferenceCategory-->
+        <!--app:key="notification_category"-->
+        <!--android:title="@string/notification">-->
+
+        <!--<Preference-->
+            <!--android:key="add_alarm_notification"-->
+            <!--android:title="@string/add_notification"/>-->
+
+    <!--</PreferenceCategory>-->
+
+
+    <!--<PreferenceCategory-->
+        <!--app:key="alarm_category"-->
+        <!--android:title="@string/alarm">-->
+
+        <!--<Preference-->
+            <!--android:key="set_alarm"-->
+            <!--android:title="@string/set_alarm"/>-->
+
+    <!--</PreferenceCategory>-->
 
 
     <!--<EditTextPreference-->

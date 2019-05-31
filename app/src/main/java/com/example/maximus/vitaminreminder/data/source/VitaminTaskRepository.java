@@ -29,6 +29,8 @@ public interface VitaminTaskRepository {
 
     void saveTask(Task task);
 
+    void deleteTask(String taskId);
+
     void completeTask(Task task);
 
     void completeTask(String taskId);
