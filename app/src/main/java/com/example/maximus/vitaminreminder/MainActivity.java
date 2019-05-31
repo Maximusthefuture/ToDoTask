@@ -1,112 +1,157 @@
 package com.example.maximus.vitaminreminder;
 
 
-import android.app.TimePickerDialog;
-import android.content.Context;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
+
+import androidx.drawerlayout.widget.DrawerLayout;
+
+
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CalendarView;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
-import com.example.maximus.vitaminreminder.pref.SettingsActivity;
-import com.example.maximus.vitaminreminder.pref.TimePreference;
-import com.example.maximus.vitaminreminder.timepicker.TimePickerActivity;
-import com.example.maximus.vitaminreminder.utils.NotificationUtils;
+import com.example.maximus.vitaminreminder.calendar.CalendarFragment;
+import com.example.maximus.vitaminreminder.more_options.MoreOptionFragment;
+import com.example.maximus.vitaminreminder.more_options.MoreOptionsActivity;
+import com.example.maximus.vitaminreminder.news_list.NewsFragment;
+import com.example.maximus.vitaminreminder.tasks.TasksFragment;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.sql.Time;
-import java.util.Calendar;
+import java.lang.reflect.Field;
 
+
+//TODO: ADD TESTING!
+//TODO: Add authorization
+//TODO: ADD Notification
+//TODO: Add CustomCalendar
 public class MainActivity extends AppCompatActivity {
-    private TextView timeWatch;
-    private ImageView vitamin;
-    private ImageView vitaminComplete;
-    private boolean isClicked;
-    private SharedPreferences sharedPreferences;
+
+    final Fragment tasksFragment = new TasksFragment();
+    final Fragment calendarFragment = new CalendarFragment();
+    final Fragment newsFragment = new NewsFragment();
+    final Fragment settingFragment = new MoreOptionFragment();
+    final FragmentManager fm = getSupportFragmentManager();
+    private LinearLayout linearLayoutToolbar;
+    Fragment active = tasksFragment;
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle toggle;
+
+
+    private BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        timeWatch = findViewById(R.id.time_watch);
-        vitamin = findViewById(R.id.iv_vitamin);
-        vitaminComplete = findViewById(R.id.iv_vitamin_complete);
-        clickVitamin();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        linearLayoutToolbar = findViewById(R.id.linear_toolbar);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        bottomNavigationView = findViewById(R.id.nav_bottom_view);
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
+
+        drawerLayout.addDrawerListener(toggle);
+
+
+//        disableShiftMode(bottomNavigationView);
+
+        bottomNavigationViewTest();
+
+        fm.beginTransaction().add(R.id.main_container, settingFragment, "4").hide(settingFragment).commit();
+        fm.beginTransaction().add(R.id.main_container, newsFragment, "3").hide(newsFragment).commit();
+        fm.beginTransaction().add(R.id.main_container, calendarFragment, "2").hide(calendarFragment).commit();
+        fm.beginTransaction().add(R.id.main_container, tasksFragment, "1").commit();
+
+
+        openDrawerOnClickInAccount();
     }
 
-    public void chooseTime(View view) {
-        Calendar mCurrentTime = Calendar.getInstance();
-        final int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
-        final int minutes = mCurrentTime.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                timeWatch.setText(hourOfDay + " : " + minute);
-            }
-        }, hour, minutes, true);
-        timePickerDialog.setTitle("Select time");
-        timePickerDialog.show();
-    }
 
-    public void clickVitamin() {
-        vitamin.setOnClickListener(new View.OnClickListener() {
+    public void openDrawerOnClickInAccount() {
+        linearLayoutToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vitamin.setVisibility(View.INVISIBLE);
-                vitaminComplete.setVisibility(View.VISIBLE);
-                isClicked = true;
-//                Toast.makeText(MainActivity.this, "Youuuupiiiii", Toast.LENGTH_SHORT).show();
-//                NotificationUtils.showNotification(MainActivity.this);
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
 
-                    vitaminComplete.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            isClickedVitamin();
-                            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                            String pref = sharedPreferences.getString("timeSet", null);
-                            Toast.makeText(MainActivity.this,"Settings time is : "+ pref, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+    }
+
+
+    public void bottomNavigationViewTest() {
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.action_tasks:
+                       fm.beginTransaction().hide(active).show(tasksFragment).commit();
+                       active = tasksFragment;
+                       return true;
+                    case R.id.action_calendar:
+                        fm.beginTransaction().hide(active).show(calendarFragment).commit();
+                        active = calendarFragment;
+                        return true;
+
+                    case R.id.action_news:
+                        fm.beginTransaction().hide(active).show(newsFragment).commit();
+                        active = newsFragment;
+                        return true;
+
+                    case R.id.action_more:
+                        fm.beginTransaction().hide(active).show(settingFragment).commit();
+                        active = settingFragment;
+//                        Intent intent = new Intent(MainActivity.this, MoreOptionsActivity.class);
+//                        startActivity(intent);
+                        return true;
+
                 }
+                return false;
+            }
         });
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings:
-                Intent intent = new Intent(MainActivity.this, TimePickerActivity.class);
-                startActivity(intent);
-
-                default:
-                    super.onOptionsItemSelected(item);
+    @SuppressLint("RestrictedApi")
+    public void disableShiftMode(BottomNavigationView view) {
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
+        try {
+            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+            shiftingMode.setAccessible(true);
+            shiftingMode.setBoolean(menuView, false);
+            shiftingMode.setAccessible(false);
+            for (int i = 0; i < menuView.getChildCount(); i++) {
+                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
+//                item.setShiftingMode(false);
+                item.setChecked(item.getItemData().isChecked());
+            }
+        } catch (NoSuchFieldException e) {
+            Log.e("BNVHelper", "Unable to get shift mode field", e);
+        } catch (IllegalAccessException e) {
+            Log.e("BNVHelper", "Unable to change value of shift mode", e);
         }
-        return true;
     }
 
-    public boolean isClickedVitamin() {
-        if (isClicked) {
-            vitamin.setVisibility(View.VISIBLE);
-            vitaminComplete.setVisibility(View.INVISIBLE );
-        }
-        return true;
-    }
+
+
 }
